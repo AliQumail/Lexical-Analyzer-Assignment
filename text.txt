@@ -1,1 +1,1 @@
-$abc_0_ef : int = 10 ;
+$abc_0_ef : int = 10 ;  " something special #~ ~# "

@@ -52,8 +52,12 @@ string* tokenize_file_to_string(){
 
 
 
-void check_valid_comment(){
-
+int check_valid_comment(string t){
+  if ( t == "#~" || t == "~#" ){
+      return 1;
+  } else {
+    return 0;
+  }
 
 
 }
@@ -98,7 +102,7 @@ int check_valid_identifier(string t){
 
       }
 
-    }
+   
 
     out_file.open ("tokens.txt",ios::app);
 
@@ -107,6 +111,9 @@ int check_valid_identifier(string t){
     out_file.close();
 
     return 1;
+     } else {
+        return 0;
+     }
 
 
 
@@ -114,11 +121,19 @@ int check_valid_identifier(string t){
 
 
 
-void check_valid_string()
+int check_valid_string(string t){
 
-{
-
-
+   for (int i = 0; i<t.size() ; i++){
+     if ((t[i] >= 65 && t[i] <= 90) || (t[i]>=97 && t[i]<=122)){
+        continue;
+     } else {
+        return 0;
+     }
+   }
+   out_file.open ("tokens.txt",ios::app);
+   out_file << "(ID, " + t + ")";
+   out_file.close();
+   return 1;
 
 }
 
@@ -274,6 +289,16 @@ int main()
 
                         cout<<tokens[i]<<" is a number"<<endl;
 
+                    } else {
+                        int is_string = check_valid_string(tokens[i]);
+                        if (is_string){
+                             cout<<tokens[i]<<" is a string"<<endl;
+                        } else {
+                            int is_comment = check_valid_comment(tokens[i]);
+                            if (is_comment) {
+                                cout<<tokens[i]<<" is a comment"<<endl;
+                            }
+                        }
                     }
 
                 }
