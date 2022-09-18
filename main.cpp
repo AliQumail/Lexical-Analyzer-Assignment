@@ -9,6 +9,7 @@ using namespace std;
 
 string myText[100] = {};
 string* tokens;
+ofstream out_file;
 
 string* tokenize_file_to_string(){
     ifstream file;
@@ -37,6 +38,9 @@ void check_valid_string(){
 }
 int check_valid_assignment_op(string t){
     if (t == "="){
+       out_file.open ("tokens.txt",ios::app);
+       out_file << "(AsOp, " + t + ")";
+       out_file.close();
        return 1;
     } 
     return 0;
@@ -47,9 +51,29 @@ int check_valid_keyword(string t){
    if (t == "int" || t == "if" || t == "else" || t == "do" || t == "until"
     || t == "then" || t == "read" || t == "display" || t == "displayline" || t == "return" ||
     t == "function" ){
+        out_file.open ("tokens.txt",ios::app);
+        out_file << "(KEY, " + t + ")";
+        out_file.close();
         return 1;
    } 
    return 0;
+}
+
+int check_valid_number(string t){
+    for (int i =0; i<t.size(); i++){
+        
+        if ( t[i] == '0' || t[i] == '1' || t[i] == '2' || t[i] == '3' 
+        || t[i] == '4' || t[i] == '5' || t[i] == '6' || t[i] == '7' || 
+         t[i] == '8' ||  t[i] == '9'){
+           continue; 
+        } else {
+            return 0;
+        }
+    }
+    out_file.open ("tokens.txt",ios::app);
+    out_file << "(NUM, " + t + ")";
+    out_file.close();
+    return 1;
 }
 
 int main()
@@ -79,9 +103,16 @@ int main()
             int is_assignment_op = check_valid_assignment_op(tokens[i]);
             if (is_assignment_op) {
                 cout<<tokens[i]<<" is an assignment operator"<<endl;
+            } else {
+                int is_number = check_valid_number(tokens[i]);
+                if (is_number){
+                    cout<<tokens[i]<<" is a number"<<endl;
+                }
             }
         }
+
     }
+
 
     
    return 0;
