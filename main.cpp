@@ -50,15 +50,46 @@ string* tokenize_file_to_string(){
 
 }
 
+int check_block_start(string t){
+    if (t == "{") {
+      out_file.open ("tokens.txt",ios::app);
+      out_file << "(Blo, " + t + ")";
+      out_file.close();
+      return 1;
+    }
+    return 0;
+}
+int check_block_end(string t){
+    if (t=="}") {
+      out_file.open ("tokens.txt",ios::app);
+      out_file << "(Blo, " + t + ")";
+      out_file.close();
+      return 1;
+    }
+    return 0;
+}
 
 
 int check_valid_comment(string t){
   if ( t == "#~" || t == "~#" ){
+      out_file.open ("tokens.txt",ios::app);
+      out_file << "(Com, " + t + ")";
+      out_file.close();
       return 1;
   } else {
     return 0;
   }
+}
 
+int check_valid_relational_op(string t){
+     if (t == "-eq" || t == "-ne" || t == "-lt" || t == "-le" || t == "-gt"
+      || t == "-ge" ){
+        out_file.open ("tokens.txt",ios::app);
+        out_file << "(RelOp, " + t + ")";
+        out_file.close();
+        return 1;
+    } 
+    return 0;
 
 }
 
@@ -131,7 +162,7 @@ int check_valid_string(string t){
      }
    }
    out_file.open ("tokens.txt",ios::app);
-   out_file << "(ID, " + t + ")";
+   out_file << "(STR, " + t + ")";
    out_file.close();
    return 1;
 
@@ -153,6 +184,26 @@ int check_valid_assignment_op(string t){
 
     return 0;
 
+}
+
+int check_valid_arithematic_op(string t){
+    if (t == "+" || t == "-" || t == "/" || t == "%" || t == "*"){
+        out_file.open ("tokens.txt",ios::app);
+        out_file << "(AriOp, " + t + ")";
+        out_file.close();
+        return 1;
+    } 
+    return 0;
+}
+
+int check_valid_special_char(string t){
+    if (t == "," || t == ":" || t == ";" || t == "(" || t == ")" || t == "$"){
+        out_file.open ("tokens.txt",ios::app);
+        out_file << "(SpChar, " + t + ")";
+        out_file.close();
+        return 1;
+    } 
+    return 0;
 }
 
 
@@ -222,24 +273,14 @@ int main()
 {
 
    // read file from texts
-
    // stores it into a string of array to make tokens
-
    tokens = tokenize_file_to_string();
-
-   
-
    // Output tokens
-
    cout << "Tokens generated "<<endl;
-
    for (int i = 0 ; i< 10; i++){
-
-       if (tokens[i] == "" ) break;
-
-       cout<<tokens[i]<<", ";
-
-    }
+        if (tokens[i] == "" ) break;
+            cout<<tokens[i]<<", "; 
+        }
 
 
 
@@ -297,6 +338,33 @@ int main()
                             int is_comment = check_valid_comment(tokens[i]);
                             if (is_comment) {
                                 cout<<tokens[i]<<" is a comment"<<endl;
+                            } else {
+                                int is_block_start = check_block_start(tokens[i]);
+                                if (is_block_start){
+                                    cout<<tokens[i]<<" is a block start"<<endl;
+                                } else {
+                                    int is_block_end = check_block_end(tokens[i]);
+                                    if (is_block_end){
+                                        cout<<tokens[i]<<" is a block end"<<endl;
+                                    } else {
+                                        int is_arith_op = check_valid_arithematic_op(tokens[i]);
+                                        if (is_arith_op){
+                                            cout<<tokens[i]<<" is a arithematic operator"<<endl;
+                                        } else {
+                                            int is_special_char = check_valid_special_char(tokens[i]);
+                                            if (is_special_char){
+                                                cout<<tokens[i]<<" is a special character"<<endl;
+                                            } else {
+                                                int is_relational_op = check_valid_relational_op(tokens[i]);
+                                                if (is_relational_op){
+                                                    cout<<tokens[i]<<" is a relational op"<<endl;
+                                                }
+                                            }
+
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }

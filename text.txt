@@ -1,1 +1,13 @@
-$abc_0_ef : int = 10 ;  " something special #~ ~# "
+functionName : returnType <- function( $param1 : param1Type , $param2: param2Type ) {
+	if (expression) then {
+#~ Statements ~#
+#~ Statements ~#
+} else if (expression) then {
+#~ Statements ~#
+#~ Statements ~#
+} else {
+#~ Statements ~#
+#~ Statements ~#
+}
+
+ 
